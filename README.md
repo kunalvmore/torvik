@@ -6,6 +6,7 @@ A static site: three pages, one stylesheet, a tiny script, and no third-party co
 ```
 index.html            Home
 privacy/index.html    Privacy policy  → use https://YOUR-DOMAIN/privacy/ in App Store Connect
+terms/index.html      Terms of use → opened from the app (About › Terms of use)
 support/index.html    Support         → use https://YOUR-DOMAIN/support/ in App Store Connect
 404.html              "Page not found"
 assets/css/style.css  All styles

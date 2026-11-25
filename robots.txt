@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://torvik.app/sitemap.xml
+Sitemap: https://kunalvmore.github.io/torvik/sitemap.xml

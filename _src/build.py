@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the Torvik website: index.html, privacy/, support/ and 404.html.
+"""Builds the Torvik website: index.html, privacy/, terms/, support/ and 404.html.
 
 Run from the website folder, with your support email in an environment variable:
 
@@ -12,7 +12,7 @@ import json
 import os
 
 # ---------------------------------------------------------------- settings
-SITE_URL = "https://torvik.app"          # your domain, no trailing slash (used for share previews and Google)
+SITE_URL = "https://kunalvmore.github.io/torvik"          # your domain, no trailing slash (used for share previews and Google)
 APP_STORE_URL = ""                       # e.g. "https://apps.apple.com/app/id1234567890" once the app is live
 APP_STORE_ID = ""                        # e.g. "1234567890" (turns on Safari's Smart App Banner)
 EMAIL = os.environ.get("TORVIK_SUPPORT_EMAIL", "support@example.com")
@@ -105,6 +105,7 @@ def footer(p):
 </div>
 <nav class="foot-links" aria-label="Footer">
 <a href="{p}privacy/">Privacy</a>
+<a href="{p}terms/">Terms</a>
 <a href="{p}support/">Support</a>
 <a href="{mail()}">{EMAIL}</a>
 </nav>
@@ -285,6 +286,37 @@ def privacy():
                     content)
 
 
+def terms():
+    p = "../"
+    short = "".join(f"<li>{t}</li>" for t in [
+        "Torvik gives general fitness guidance. It is not medical advice.",
+        "You train at your own risk. Stop if anything hurts.",
+        "Form check scores are a guide, not a diagnosis.",
+        "Apple’s standard licence agreement applies to the app.",
+        "The Torvik name, icon and content belong to Torvik."])
+    contact = f'<a href="{mail()}">{EMAIL}</a>'
+    eula = '<a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" rel="noopener">Licensed Application End User License Agreement</a>'
+    content = f'''
+<div class="gcard summary reveal"><div class="inner"><h2>The short version</h2><ul class="ticks">{short}</ul></div></div>
+<div class="prose">
+<h2>Agreeing to these terms</h2><p>By downloading or using Torvik, you agree to these terms and to Apple’s {eula} (the “Standard EULA”), which applies to every app from the App Store. If you don’t agree, please don’t use the app.</p>
+<h2>Not medical advice</h2><p>Torvik gives general fitness information, 3D exercise demonstrations and form feedback. It is not medical advice and doesn’t replace your doctor, a physiotherapist or a qualified trainer. Talk to your doctor before you start a new exercise programme, especially if you have an injury or a health condition, are pregnant, or are coming back after a long break.</p>
+<h2>Training at your own risk</h2><p>Exercise carries a risk of injury. Warm up first, use weights you can control with good form, and train in a safe space with enough room around you. Stop straight away if you feel pain, dizziness or shortness of breath, and get medical help if it doesn’t pass. You are responsible for choosing exercises and weights that are right for you.</p>
+<h2>Camera form check</h2><p>Form check uses your iPhone’s camera to count reps and estimate your form. Results depend on lighting, camera position and clothing, and can be wrong. Scores and tips are guidance to help you improve. They are not an assessment of injury or a guarantee of safe technique.</p>
+<h2>Who can use Torvik</h2><p>You must be at least 13 to use Torvik. If you are under 18, please use it with the permission of a parent or guardian.</p>
+<h2>Your data</h2><p>Your workouts belong to you. How Torvik stores and protects them is explained in our <a href="{p}privacy/">Privacy Policy</a>.</p>
+<h2>Torvik’s content</h2><p>The Torvik name and icon, the 3D models and animations, exercise instructions, design and code belong to Torvik. You may use them in the app for your own training. Please don’t copy, sell or redistribute them.</p>
+<h2>How the app is provided</h2><p>We work hard to keep Torvik accurate and working well, but the app is provided “as is”, without guarantees that it will always be available or free of errors. Features may be added, changed or removed in future versions. If we add paid features, the price and terms will be shown clearly before you buy, and this page will be updated.</p>
+<h2>Limits on our responsibility</h2><p>As far as the law allows, Torvik isn’t responsible for any injury, loss or damage that comes from using the app or relying on its guidance. Nothing in these terms takes away rights you have by law that can’t be limited.</p>
+<h2>Changes to these terms</h2><p>We may update these terms from time to time. When we do, we’ll change the date at the top of this page. If you keep using Torvik after an update, you accept the new terms.</p>
+<h2>Contact</h2><p>Questions about these terms? Email {contact}.</p>
+</div>'''
+    return doc_page(p, "", "/terms/", "Terms of use · Torvik", "Terms of use",
+                    'Train hard. <span class="grad">Train safely.</span>',
+                    "Last updated 25 November 2026. These terms cover your use of the Torvik app. They’re short and written in plain English.",
+                    content)
+
+
 def support():
     p = "../"
     faqs = [
@@ -332,10 +364,11 @@ def write(rel, html):
 if __name__ == "__main__":
     write("index.html", home())
     write("privacy/index.html", privacy())
+    write("terms/index.html", terms())
     write("support/index.html", support())
     write("404.html", not_found())
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
-    urls = "".join(f"<url><loc>{SITE_URL}{u}</loc></url>" for u in ("/", "/privacy/", "/support/"))
+    urls = "".join(f"<url><loc>{SITE_URL}{u}</loc></url>" for u in ("/", "/privacy/", "/terms/", "/support/"))
     write("sitemap.xml", f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n')
     note = "" if "TORVIK_SUPPORT_EMAIL" in os.environ else "  (support email is a placeholder: set TORVIK_SUPPORT_EMAIL)"
-    print("Built index.html, privacy/, support/, 404.html, robots.txt, sitemap.xml" + note)
+    print("Built index.html, privacy/, terms/, support/, 404.html, robots.txt, sitemap.xml" + note)
